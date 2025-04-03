@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Notes App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #333;
+            text-align: center;
+        }
+
+        p {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #666;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .title-input {
+            height: 40px;
+            width: 95%;
+        }
+
+        .desc-input {
+            height: 80px;
+            width: 95%;
+        }
+
+        .button {
+            background-color: #6a0dad;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-bottom: 20px;
+            width: 99%;
+            font-size: 16px;
+        }
+
+        .button:hover {
+            background-color: #551a8b;
+        }
+
+        .task-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .task-card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.task-card:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+.task-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    background-color: #f4f4f4;
+    padding: 10px;
+    margin-bottom: 15px;
+    text-align: center;
+    border-radius: 8px;
+    text-transform: uppercase;
+}
+
+.task-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.read-more {
+    font-size: 14px;
+    color: #6a0dad;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.read-more:hover {
+    color: #551a8b;
+}
+
+.delete-button {
+    background-color: #a67b7b;
+    color: white;
+    border: none;
+    padding: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.delete-button:hover {
+    background-color: #b78989;
+}
+
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>My Notes</h1>
+        <p>Add your tasks below:</p>
+        <form action="/create" method="post">
+            <textarea class="title-input" placeholder="Title" name="title"></textarea>
+            <textarea class="desc-input" placeholder="Description" name="desc"></textarea>
+            <input class="button" type="submit" value="Add Task">
+        </form>
+
+        <% if (tasks.length === 0) { %>
+            <p style="text-align: center; color: #777; margin: 20px 0;">No tasks yet.</p>
+        <% } else { %>
+            <div class="task-grid">
+                <% tasks.forEach(function(task) { %>
+                    <div class="task-card">
+                        <div class="task-title"><%= task %></div>
+                        <div class="task-footer">
+                            <a href="/file/<%= task %>" class="read-more">Read more...</a>
+                            <a href="/delete/<%= task %>" class="delete-button">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                <% }) %>
+            </div>
+        <% } %>
+    </div>
+</body>
+</html>
