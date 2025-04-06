@@ -8,17 +8,33 @@ app.use(express.json());
 app.use(express.urlencoded({extended : true}));
 app.use(express.static(Path.join(__dirname,"public")))
 
-app.get("/",function (req,res) {
-    fs.readdir(`./tasks`,function (err,tasks){
-        //task sort by time 
+app.get("/", function (req, res) {
+    const tasksFolder = "./tasks";
+
+    // If the tasks folder doesn't exist, create it
+    if (!fs.existsSync(tasksFolder)) {
+        fs.mkdirSync(tasksFolder);
+    }
+
+    fs.readdir(tasksFolder, function (err, tasks) {
+        if (err) {
+            console.error("Error reading tasks folder:", err);
+            return res.render("index", { tasks: [] }); // render empty list if error
+        }
+
+        if (!Array.isArray(tasks)) tasks = [];
+
+        // Sort tasks by creation time (latest first)
         tasks.sort((a, b) => {
-            const aTime = fs.statSync(`./tasks/${a}`).birthtimeMs;
-            const bTime = fs.statSync(`./tasks/${b}`).birthtimeMs;
-            return bTime - aTime; 
+            const aTime = fs.statSync(`${tasksFolder}/${a}`).birthtimeMs;
+            const bTime = fs.statSync(`${tasksFolder}/${b}`).birthtimeMs;
+            return bTime - aTime;
         });
-        res.render("index",{tasks : tasks});
-    })  
-})
+
+        res.render("index", { tasks: tasks });
+    });
+});
+
 
 app.get("/file/:filename",function (req,res) {
     fs.readFile(`./tasks/${req.params.filename}`,"utf-8",function (err,filedata) {
