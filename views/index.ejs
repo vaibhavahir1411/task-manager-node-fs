@@ -18,7 +18,7 @@
 
       .container {
         max-width: 800px;
-        margin: 80px auto;
+        margin: 30px auto;
         padding: 30px;
         background-color: white;
         border-radius: 8px;
@@ -81,13 +81,13 @@
         padding: 10px;
         grid-template-columns: repeat(3, 1fr);
         gap: 15px;
-        max-height: 150px;
+        max-height: 170px;
         overflow-y: auto;
       }
 
       .task-card {
         background: #ffffff;
-        padding: 20px;
+        padding: 10px;
         border-radius: 12px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -158,6 +158,11 @@
 
       .edit-button:hover {
         background-color: #478057;
+      }
+      @media(max-width:426px){
+        .task-grid {
+          grid-template-columns : repeat(1, 1fr);
+        }
       }
     </style>
   </head>
