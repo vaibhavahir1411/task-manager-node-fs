@@ -1,10 +1,12 @@
+//require all needed thing from node
 const express = require("express");
 const app = express();
 const Path = require("path");
 const fs = require("fs");
 const cookieParser = require("cookie-parser");
-const { v4: uuidv4 } = require("uuid");
+const { v4: uuidv4 } = require("uuid");//for generate unique id for individual user
 
+// use all
 app.set("view engine", "ejs");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -13,13 +15,15 @@ app.use(cookieParser());
 
 // Assign a unique user ID using cookies
 app.use((req, res, next) => {
-    if (!req.cookies.userId) {
-        const userId = uuidv4();
-        res.cookie("userId", userId, { maxAge: 30 * 24 * 60 * 60 * 1000 }); // 30 days
-        const userFolder = `./tasks/${userId}`;
+    if (!req.cookies.userId) {//if there is no user of that id
+        const userId = uuidv4();//it will create new id
+        res.cookie("userId", userId, { maxAge: 30 * 24 * 60 * 60 * 1000 }); //stire it fo 30 days(it is in milisecond)
+        const userFolder = `./tasks/${userId}`;// it will create new folder in task for perticular user as per id
         if (!fs.existsSync(userFolder)) fs.mkdirSync(userFolder, { recursive: true });
+        //check that the folder exist if not then it will create new one 
+        //recursive : true means, create all missing parent folder ex. you have given path  ./tasks/${userId} if tasks folder doesn't exist it will create
     }
-    next();
+    next();//for show middlewere is completed now move on next
 });
 
 app.get("/", function (req, res) {
@@ -31,12 +35,12 @@ app.get("/", function (req, res) {
 
     fs.readdir(userFolder, function (err, tasks) {
         if (err || !Array.isArray(tasks)) return res.render("index", { tasks: [] });
-
+        // there is error or array is empty it will return empty array
         tasks.sort((a, b) => {
             const aTime = fs.statSync(`${userFolder}/${a}`).birthtimeMs;
             const bTime = fs.statSync(`${userFolder}/${b}`).birthtimeMs;
             return bTime - aTime;
-        });
+        });//to sort task as per time
 
         res.render("index", { tasks });
     });
